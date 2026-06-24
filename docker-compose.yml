@@ -1,0 +1,23 @@
+services:
+  api_1:
+    build: ./api
+    hostname: api-contenedor-uno
+    expose:
+      - "3000"
+
+  api_2:
+    build: ./api
+    hostname: api-contenedor-dos
+    expose:
+      - "3000"
+
+  proxy:
+    image: nginx:alpine
+    volumes:
+      # CAMBIO CLAVE: Reemplazamos el archivo de configuración maestro de NGINX
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - api_1
+      - api_2
